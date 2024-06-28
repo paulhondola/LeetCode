@@ -7,19 +7,26 @@ struct TreeNode {
   struct TreeNode *right;
 };
 
-typedef struct TreeNode *tree;
-
-const int MAX_NODES = 1000;
-int nodes[MAX_NODES];
-int nodesCount = 0;
-void get_tree(tree root) {
-
-  if (root == NULL)
+// Helper function for the in-order traversal to find the kth smallest element.
+void inOrderTraversal(struct TreeNode *root, int *k, int *result) {
+  if (root == NULL) {
     return;
+  }
 
-  get_tree(root->left);
-  nodes[nodesCount++] = root->val;
-  get_tree(root->right);
+  inOrderTraversal(root->left, k, result);
+
+  (*k)--;
+  if (*k == 0) {
+    *result = root->val;
+    return;
+  }
+
+  inOrderTraversal(root->right, k, result);
 }
 
-int kthSmallest(tree root, int k) { return nodes[k - 1]; }
+// Function to find the kth smallest element in a BST.
+int kthSmallest(struct TreeNode *root, int k) {
+  int result = -1;
+  inOrderTraversal(root, &k, &result);
+  return result;
+}
