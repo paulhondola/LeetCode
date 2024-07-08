@@ -9,44 +9,11 @@ struct ListNode {
 typedef struct ListNode *node;
 
 node init_node(int val) {
-  node n = (node)malloc(sizeof(struct ListNode));
+  node new_node = (node)malloc(sizeof(struct ListNode));
+  new_node->val = val;
+  new_node->next = NULL;
 
-  if (n == NULL) {
-    fprintf(stderr, "Memory allocation failed\n");
-    exit(1);
-  }
-
-  n->val = val;
-  n->next = NULL;
-  return n;
-}
-
-node add_node(node head, int val) {
-  node new = init_node(val);
-  new->next = head;
-  head = new;
-  return head;
-}
-
-node deleteDuplicates(node head) {
-  if (head == NULL) {
-    return NULL;
-  }
-
-  node current = head;
-  node next = head->next;
-
-  while (next != NULL) {
-    if (current->val == next->val) {
-      current->next = next->next;
-      free(next);
-      next = current->next;
-    } else {
-      current = next;
-      next = next->next;
-    }
-  }
-  return head;
+  return new_node;
 }
 
 void print_list(node head) {
@@ -61,22 +28,52 @@ void print_list(node head) {
 }
 
 node removeElements(node head, int val) {
-  while (head->val == val)
+
+  if (head == NULL)
+    return NULL;
+
+  // remove the first element if it is equal to val
+  while (head->val == val && head->next != NULL) {
+    node temp = head;
     head = head->next;
+    free(temp);
+  }
+
+  if (head->val == val) {
+    free(head);
+    return NULL;
+  }
+
+  // remove the rest of the elements
+  node current = head;
+  while (current != NULL && current->next != NULL) {
+    if (current->next->val == val) {
+      node temp = current->next;
+      current->next = current->next->next;
+      free(temp);
+    } else {
+      current = current->next;
+    }
+  }
+
+  return head;
 }
 
 int main(void) {
 
-  node list = init_node(1);
-  list = add_node(list, 2);
-  list = add_node(list, 3);
-  list = add_node(list, 3);
-  list = add_node(list, 4);
-  list = add_node(list, 4);
-
-  list = deleteDuplicates(list);
+  node list = init_node(6);
+  list->next = init_node(6);
+  list->next->next = init_node(6);
+  list->next->next->next = init_node(6);
+  list->next->next->next->next = init_node(6);
+  list->next->next->next->next->next = init_node(6);
+  list->next->next->next->next->next->next = init_node(6);
 
   print_list(list);
+
+  list = removeElements(list, 6);
+
+  // print_list(list);
 
   return 0;
 }
