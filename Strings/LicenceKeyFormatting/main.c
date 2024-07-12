@@ -3,14 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 char *licenseKeyFormatting(char *s, int k) {
   int len = strlen(s);
-  char *formatted = malloc(len);
-  char *letters = calloc(len, sizeof(char));
+  char *formatted = malloc(len + len / k + 1);
+  char *letters = malloc(len + 1);
 
   int lettersIndex = 0;
 
-  for (int i = len - 1; i >= 0; i--) {
+  for (int i = 0; i < len; i++) {
     if (s[i] != '-') {
       letters[lettersIndex++] = toupper(s[i]);
     }
@@ -40,13 +41,15 @@ char *licenseKeyFormatting(char *s, int k) {
     formatted[formattedIndex++] = letters[i];
   }
 
+  formatted[formattedIndex] = '\0';
+
   return formatted;
 }
 
 int main(void) {
-  char *s = "5F3Z-2e-9-w";
+  char *s = "aaaa";
 
-  char *formatted = licenseKeyFormatting(s, 5);
+  char *formatted = licenseKeyFormatting(s, 2);
 
   printf("%s\n", formatted);
 
