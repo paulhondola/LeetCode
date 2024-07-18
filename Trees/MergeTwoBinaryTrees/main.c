@@ -1,24 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct TreeNode {
+  int val;
+  struct TreeNode *left;
+  struct TreeNode *right;
+};
+
 typedef struct TreeNode *tree;
 
-void merge(tree main, tree sum) {
-  if (main == NULL && sum == NULL)
-    return;
+tree merge(tree t1, tree t2) {
+  if (!t1 && !t2)
+    return NULL;
+  if (!t1)
+    return t2;
+  if (!t2)
+    return t1;
 
-  if (main == NULL) {
-    main = sum;
-    return;
-  }
+  // Merge the values of the current nodes
+  t1->val += t2->val;
 
-  if (sum == NULL)
-    return;
+  // Recursively merge the left and right subtrees
+  t1->left = merge(t1->left, t2->left);
+  t1->right = merge(t1->right, t2->right);
 
-  main->val += sum->val;
-
-  merge(main->left, sum->left);
-  merge(main->right, sum->right);
+  return t1;
 }
 
-tree mergeTrees(tree root1, tree root2) {
-  merge(root1, root2);
-  return root1;
-}
+tree mergeTrees(tree root1, tree root2) { return merge(root1, root2); }
