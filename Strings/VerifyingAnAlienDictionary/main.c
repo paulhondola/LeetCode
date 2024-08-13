@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 bool isAlienSorted(char **words, int wordsSize, char *order) {
   int orderMap[26];
   for (int i = 0; i < 26; i++)
